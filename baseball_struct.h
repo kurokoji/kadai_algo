@@ -1,3 +1,6 @@
+#ifndef INCLUDE_BASEBALL_STRUCT_H
+#define INCLUDE_BASEBALL_STRUCT_H
+
 typedef struct Player {
   struct Player* node;
   int uniform_number; // 背番号
@@ -10,3 +13,5 @@ typedef struct Player {
   char school_name[32]; // 出身校
   char team_name[32]; // 所属チーム
 } Player;
+
+#endif
