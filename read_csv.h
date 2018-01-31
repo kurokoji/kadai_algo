@@ -17,6 +17,7 @@ Player read_csv(char line[], char team_name[]) {
   return ret;
 }
 
+/*
 int main(void) {
   char filename[] = "./data/carp.csv";
   char readline[LINE_LENGTH];
@@ -34,6 +35,7 @@ int main(void) {
 
   return (0);
 }
+*/
 
 #endif
 
