@@ -1,16 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "baseball_struct.h"
 #include "chain_list.h"
-
+#include "read_csv.h"
+#include "baseball_struct.h"
 
 Player* player_height;
 int player_height_sort(void);
 void disp_ar(Player ar[], int num, int N);
+void make_list(void);
 
 int main(void) {
   int select;
   int player_num;
+  make_list();
   printf("セ・リーグ投手データベース\n");
   player_num = player_height_sort();
 
@@ -35,6 +37,40 @@ int main(void) {
   } while (select != 0);
 
   return 0;
+}
+
+void make_list(void) {
+  char filename[6][32] = {
+    "./data/carp.csv",
+    "./data/dena.csv",
+    "./data/dragons.csv",
+    "./data/giants.csv",
+    "./data/swallows.csv",
+    "./data/tigers.csv"
+  };
+  int i = 0;
+  
+  Init(); // 連結リストの初期化
+  for (i = 0; i < 6; i++) {
+    char readline[LINE_LENGTH];
+    Player player;
+    FILE *fp;
+    if ((fp = fopen(filename[i], "r")) == NULL) {
+      printf("error: Can not file open");
+      exit(EXIT_FAILURE);
+    }
+    while (fgets(readline, LINE_LENGTH, fp) != NULL) {
+      player = read_csv(readline, i);
+      Add(i, &player);
+    }
+  }
+  for (i = 0; i < 6; i++) {
+    Player* p = Header[i];
+    while (p != NULL) {
+      // printf("uniform: %d\n", p->uniform_number);
+      p = p->node;
+    }
+  }
 }
 
 void swap(Player* a, Player* b) {
