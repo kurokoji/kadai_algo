@@ -5,7 +5,9 @@
 #include "baseball_struct.h"
 
 Player* player_height;
+Player* player_weight;
 int player_height_sort(void);
+int player_weight_sort(void);
 void disp_ar(Player ar[], int num, int N);
 void make_list(void);
 
@@ -15,6 +17,7 @@ int main(void) {
   make_list();
   printf("セ・リーグ投手データベース\n");
   player_num = player_height_sort();
+  player_weight_sort();
 
   do {
     printf("何をしますか?\n");
@@ -22,20 +25,41 @@ int main(void) {
     printf("1: チームの検索\n");
     printf("2: ランキング(身長と体重)\n");
 
+    printf(">> ");
     scanf("%d", &select);
+    printf("\n");
 
     switch (select) {
+      int n, kind;
     case 0:
       break;
     case 1:
       break;
     case 2:
-      disp_ar(player_height, 10, player_num);
+      printf("0: 身長\n");
+      printf("1: 体重\n");
+      printf(">> ");
+      scanf("%d", &kind);
+      printf("表示人数は?\n");
+      printf(">> ");
+      scanf("%d", &n);
+      switch (kind) {
+      case 0:
+        disp_ar(player_height, n, player_num);
+        break;
+      case 1:
+        disp_ar(player_weight, n, player_num);
+        break;
+      }
       break;
     }
+    printf("\n");
 
   } while (select != 0);
 
+  free(player_height);
+  free(player_weight);
+  Init();
   return 0;
 }
 
@@ -63,7 +87,9 @@ void make_list(void) {
       player = read_csv(readline, i);
       Add(i, &player);
     }
+    fclose(fp);
   }
+
   for (i = 0; i < 6; i++) {
     Player* p = Header[i];
     while (p != NULL) {
@@ -107,9 +133,45 @@ int player_height_sort(void) {
   return cnt;
 }
 
+// 挿入ソート
+int player_weight_sort(void) {
+  int cnt = 0;
+  int i, j;
+  for (i = 0; i < 6; ++i) {
+    Player* p;
+    for (p = Header[i]; p->node != NULL; p = p->node) {
+      cnt++;
+    }
+  }
+
+  player_weight = (Player*)malloc(sizeof(Player) * cnt);
+  int idx = 0;
+  for (i = 0; i < 6; ++i) {
+    Player* p;
+    for (p = Header[i]; p->node != NULL; p = p->node) {
+      player_weight[idx++] = *p;
+    }
+  }
+
+  for (i = 1; i < cnt; ++i) {
+    for (j = i; j > 0 && player_weight[j].weight > player_weight[j - 1].weight; --j) {
+      swap(player_weight + j, player_weight + j - 1);
+    }
+  }
+  return cnt;
+}
+
 void disp_ar(Player ar[], int num, int N) {
   int i;
   for (i = 0; i < num && i < N; ++i) {
-    printf("%d,%s,%d,%d,%d,%d,%s,%s,%s\n", ar[i].uniform_number, ar[i].player_name, ar[i].years, ar[i].age, ar[i].height, ar[i].weight, ar[i].hand, ar[i].school_name, ar[i].team_name);
+    printf("-------------------------\n");
+    printf("[チーム名]%s [背番号]%d [名前]%s\n", ar[i].team_name, ar[i].uniform_number, ar[i].player_name);
+    printf("[年数]%d\n", ar[i].years);
+    printf("[年齢]%d\n", ar[i].age);
+    printf("[身長]%dcm\n", ar[i].height);
+    printf("[体重]%dkg\n", ar[i].weight);
+    printf("[投打]%s\n", ar[i].hand);
+    printf("[出身校]%s\n", ar[i].school_name);
+    printf("-------------------------\n");
   }
 }
