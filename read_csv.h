@@ -19,8 +19,8 @@ char team_name[6][64] = {
 
 Player read_csv(char line[], int team_num) {
   Player ret;
-  sscanf(line, "%d,%s,%d,%d,%d,%d,%s,%s", &ret.uniform_number, ret.player_name
-      , &ret.years, &ret.age, &ret.height, &ret.weight, ret.hand, ret.team_name);
+  sscanf(line, "%d,%[^,],%d,%d,%d,%d,%[^,],%[^,\n]", &ret.uniform_number, ret.player_name
+      , &ret.years, &ret.age, &ret.height, &ret.weight, ret.hand, ret.school_name);
   strcpy(ret.team_name, team_name[team_num]);
 
   return ret;
