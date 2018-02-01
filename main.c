@@ -9,6 +9,8 @@ Player* player_weight;
 int player_height_sort(void);
 int player_weight_sort(void);
 void disp_ar(Player ar[], int num, int N);
+void disp_player(Player *player);
+void disp_team(int team_number);
 void make_list(void);
 
 int main(void) {
@@ -34,6 +36,14 @@ int main(void) {
     case 0:
       break;
     case 1:
+      printf("0: CARP\n");
+      printf("1: DENA\n");
+      printf("2: DRAGONS\n");
+      printf("3: GIANTS\n");
+      printf("4: SWALLOWS\n");
+      printf("5: TIGERS\n");
+      scanf("%d", &n);
+      disp_team(n);
       break;
     case 2:
       printf("0: 身長\n");
@@ -164,14 +174,25 @@ int player_weight_sort(void) {
 void disp_ar(Player ar[], int num, int N) {
   int i;
   for (i = 0; i < num && i < N; ++i) {
-    printf("-------------------------\n");
-    printf("[チーム名]%s [背番号]%d [名前]%s\n", ar[i].team_name, ar[i].uniform_number, ar[i].player_name);
-    printf("[年数]%d\n", ar[i].years);
-    printf("[年齢]%d\n", ar[i].age);
-    printf("[身長]%dcm\n", ar[i].height);
-    printf("[体重]%dkg\n", ar[i].weight);
-    printf("[投打]%s\n", ar[i].hand);
-    printf("[出身校]%s\n", ar[i].school_name);
-    printf("-------------------------\n");
+    disp_player(&ar[i]);
+  }
+}
+
+void disp_player(Player *player) {
+  printf("-------------------------\n");
+  printf("[チーム名]%s [背番号]%d [名前]%s\n", player->team_name, player->uniform_number, player->player_name);
+  printf("[年数]%d\n", player->years);
+  printf("[年齢]%d\n", player->age);
+  printf("[身長]%dcm\n", player->height);
+  printf("[体重]%dkg\n", player->weight);
+  printf("[投打]%s\n", player->hand);
+  printf("[出身校]%s\n", player->school_name);
+  printf("-------------------------\n");
+}
+
+void disp_team(int team_number) {
+  Player *p;
+  for (p = Header[team_number]; p != NULL; p = p->node) {
+    disp_player(p);
   }
 }
